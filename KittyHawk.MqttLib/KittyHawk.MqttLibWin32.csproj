@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ECC17C68-99B7-4C34-A36F-A5B76D6DC874}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KittyHawk.MqttLib</RootNamespace>
+    <AssemblyName>KittyHawk.MqttLibWin32</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Win32\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Win32\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>KittyHawkSample.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyCommon.cs" />
+    <Compile Include="Client\ActiveClientCollection.cs" />
+    <Compile Include="Client\MqttWin32Client.cs" />
+    <Compile Include="Client\SubscriptionClient.cs" />
+    <Compile Include="Collections\AutoExpandingArray.cs" />
+    <Compile Include="Collections\MessageStore.cs" />
+    <Compile Include="Collections\QualityOfServiceCollection.cs" />
+    <Compile Include="Exceptions\ErrorCode.cs" />
+    <Compile Include="Exceptions\ErrorContextException.cs" />
+    <Compile Include="Exceptions\NotRespondingException.cs" />
+    <Compile Include="Interfaces\INetworkStream.cs" />
+    <Compile Include="Interfaces\ISocketAdapter.cs" />
+    <Compile Include="Messages\MqttFixedHeader.cs" />
+    <Compile Include="Messages\MqttMessageDeserializer.cs" />
+    <Compile Include="Messages\MqttPingRequestMessage.cs" />
+    <Compile Include="Messages\MqttPingRequestMessageBuilder.cs" />
+    <Compile Include="Messages\MqttPingResponseMessage.cs" />
+    <Compile Include="Messages\MqttPingResponseMessageBuilder.cs" />
+    <Compile Include="Messages\MqttPublishCompleteMessage.cs" />
+    <Compile Include="Messages\MqttPublishCompleteMessageBuilder.cs" />
+    <Compile Include="Messages\MqttPublishReceivedMessage.cs" />
+    <Compile Include="Messages\MqttPublishReceivedMessageBuilder.cs" />
+    <Compile Include="Messages\MqttPublishReleaseMessage.cs" />
+    <Compile Include="Messages\MqttPublishReleaseMessageBuilder.cs" />
+    <Compile Include="Messages\MqttSubscribeAckMessage.cs" />
+    <Compile Include="Messages\MqttSubscribeAckMessageBuilder.cs" />
+    <Compile Include="Messages\MqttSubscribeMessage.cs" />
+    <Compile Include="Collections\SubscriptionItemCollection.cs" />
+    <Compile Include="Messages\MqttSubscribeMessageBuilder.cs" />
+    <Compile Include="Messages\MqttUnsubscribeAckMessage.cs" />
+    <Compile Include="Messages\MqttUnsubscribeAckMessageBuilder.cs" />
+    <Compile Include="Messages\MqttUnsubscribeMessage.cs" />
+    <Compile Include="Messages\MqttUnsubscribeMessageBuilder.cs" />
+    <Compile Include="Net\MqttClientProtocol.cs" />
+    <Compile Include="Net\MqttProtocolBase.cs" />
+    <Compile Include="Net\NetworkEnums.cs" />
+    <Compile Include="Net\Win32SocketAdapter.cs" />
+    <Compile Include="Interfaces\IMqttMessage.cs" />
+    <Compile Include="Interfaces\IMqttMessageBuilder.cs" />
+    <Compile Include="Interfaces\IProtocolSettings.cs" />
+    <Compile Include="Messages\Enumerations.cs" />
+    <Compile Include="Messages\MqttConnectAckMessage.cs" />
+    <Compile Include="Messages\MqttConnectAckMessageBuilder.cs" />
+    <Compile Include="Messages\MqttConnectMessage.cs" />
+    <Compile Include="Messages\MqttConnectMessageBuilder.cs" />
+    <Compile Include="Messages\MqttDisconnectMessage.cs" />
+    <Compile Include="Messages\MqttDisconnectMessageBuilder.cs" />
+    <Compile Include="Messages\MqttMessageBase.cs" />
+    <Compile Include="Messages\MqttMessageBuilderBase.cs" />
+    <Compile Include="Messages\MqttPublishAckMessage.cs" />
+    <Compile Include="Messages\MqttPublishAckMessageBuilder.cs" />
+    <Compile Include="Messages\MqttPublishMessage.cs" />
+    <Compile Include="Messages\MqttPublishMessageBuilder.cs" />
+    <Compile Include="MqttProtocolInformation.cs" />
+    <Compile Include="Net\MqttNetEventArgs.cs" />
+    <Compile Include="Net\SocketEventArgs.cs" />
+    <Compile Include="Net\Win32SocketWorker.cs" />
+    <Compile Include="Plugins\Logging\DebugLogger.cs" />
+    <Compile Include="Plugins\Logging\ILogger.cs" />
+    <Compile Include="Plugins\Logging\LogCompositor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\IInternalSettings.cs" />
+    <Compile Include="Settings\MqttSettings.cs" />
+    <Compile Include="Settings\MqttWin32PlatformSettings.cs" />
+    <Compile Include="Utilities\DataValidation.cs" />
+    <Compile Include="Utilities\Frame.cs" />
+    <Compile Include="Utilities\TimeoutTimer.cs" />
+    <Compile Include="Utilities\Topic.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="KittyHawkSample.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

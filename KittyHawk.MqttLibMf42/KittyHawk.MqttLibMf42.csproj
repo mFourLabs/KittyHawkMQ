@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AssemblyName>KittyHawk.MqttLibMf42</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KittyHawk.MqttLibMf42</RootNamespace>
+    <ProjectTypeGuids>{b69e3092-b931-443c-abe7-7e7b65f2a37f};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C98651E9-44A3-4DEC-9A87-6EFA5242D598}</ProjectGuid>
+    <TargetFrameworkVersion>v4.2</TargetFrameworkVersion>
+    <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\NetMf\MqttLib\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\NetMf\MqttLib\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
+  <ItemGroup>
+    <Compile Include="..\KittyHawk.MqttLib\AssemblyCommon.cs">
+      <Link>AssemblyCommon.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Client\ActiveClientCollection.cs">
+      <Link>Client\ActiveClientCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Collections\AutoExpandingArray.cs">
+      <Link>Collections\AutoExpandingArray.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Collections\MessageStore.cs">
+      <Link>Collections\MessageStore.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Collections\QualityOfServiceCollection.cs">
+      <Link>Collections\QualityOfServiceCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Collections\SubscriptionItemCollection.cs">
+      <Link>Collections\SubscriptionItemCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Exceptions\ErrorCode.cs">
+      <Link>Exceptions\ErrorCode.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Exceptions\ErrorContextException.cs">
+      <Link>Exceptions\ErrorContextException.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Exceptions\NotRespondingException.cs">
+      <Link>Exceptions\NotRespondingException.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Interfaces\IMqttMessage.cs">
+      <Link>Interfaces\IMqttMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Interfaces\IMqttMessageBuilder.cs">
+      <Link>Interfaces\IMqttMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Interfaces\INetworkStream.cs">
+      <Link>Interfaces\INetworkStream.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Interfaces\IProtocolSettings.cs">
+      <Link>Interfaces\IProtocolSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Interfaces\ISocketAdapter.cs">
+      <Link>Interfaces\ISocketAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\Enumerations.cs">
+      <Link>Messages\Enumerations.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttConnectAckMessage.cs">
+      <Link>Messages\MqttConnectAckMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttConnectAckMessageBuilder.cs">
+      <Link>Messages\MqttConnectAckMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttConnectMessage.cs">
+      <Link>Messages\MqttConnectMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttConnectMessageBuilder.cs">
+      <Link>Messages\MqttConnectMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttDisconnectMessage.cs">
+      <Link>Messages\MqttDisconnectMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttDisconnectMessageBuilder.cs">
+      <Link>Messages\MqttDisconnectMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttFixedHeader.cs">
+      <Link>Messages\MqttFixedHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttMessageBase.cs">
+      <Link>Messages\MqttMessageBase.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttMessageBuilderBase.cs">
+      <Link>Messages\MqttMessageBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttMessageDeserializer.cs">
+      <Link>Messages\MqttMessageDeserializer.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPingRequestMessage.cs">
+      <Link>Messages\MqttPingRequestMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPingRequestMessageBuilder.cs">
+      <Link>Messages\MqttPingRequestMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPingResponseMessage.cs">
+      <Link>Messages\MqttPingResponseMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPingResponseMessageBuilder.cs">
+      <Link>Messages\MqttPingResponseMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishAckMessage.cs">
+      <Link>Messages\MqttPublishAckMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishAckMessageBuilder.cs">
+      <Link>Messages\MqttPublishAckMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishCompleteMessage.cs">
+      <Link>Messages\MqttPublishCompleteMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishCompleteMessageBuilder.cs">
+      <Link>Messages\MqttPublishCompleteMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishMessage.cs">
+      <Link>Messages\MqttPublishMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishMessageBuilder.cs">
+      <Link>Messages\MqttPublishMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishReceivedMessage.cs">
+      <Link>Messages\MqttPublishReceivedMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishReceivedMessageBuilder.cs">
+      <Link>Messages\MqttPublishReceivedMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishReleaseMessage.cs">
+      <Link>Messages\MqttPublishReleaseMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttPublishReleaseMessageBuilder.cs">
+      <Link>Messages\MqttPublishReleaseMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttSubscribeAckMessage.cs">
+      <Link>Messages\MqttSubscribeAckMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttSubscribeAckMessageBuilder.cs">
+      <Link>Messages\MqttSubscribeAckMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttSubscribeMessage.cs">
+      <Link>Messages\MqttSubscribeMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttSubscribeMessageBuilder.cs">
+      <Link>Messages\MqttSubscribeMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttUnsubscribeAckMessage.cs">
+      <Link>Messages\MqttUnsubscribeAckMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttUnsubscribeAckMessageBuilder.cs">
+      <Link>Messages\MqttUnsubscribeAckMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttUnsubscribeMessage.cs">
+      <Link>Messages\MqttUnsubscribeMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Messages\MqttUnsubscribeMessageBuilder.cs">
+      <Link>Messages\MqttUnsubscribeMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\MqttProtocolInformation.cs">
+      <Link>MqttProtocolInformation.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Net\MqttClientProtocol.cs">
+      <Link>Net\MqttClientProtocol.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Net\MqttNetEventArgs.cs">
+      <Link>Net\MqttNetEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Net\MqttProtocolBase.cs">
+      <Link>Net\MqttProtocolBase.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Net\NetworkEnums.cs">
+      <Link>Net\NetworkEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Net\SocketEventArgs.cs">
+      <Link>Net\SocketEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Plugins\Logging\ILogger.cs">
+      <Link>Plugins\Logging\ILogger.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Settings\IInternalSettings.cs">
+      <Link>Settings\IInternalSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Settings\MqttSettings.cs">
+      <Link>Settings\MqttSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Utilities\DataValidation.cs">
+      <Link>Utilities\DataValidation.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Utilities\Frame.cs">
+      <Link>Utilities\Frame.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Utilities\TimeoutTimer.cs">
+      <Link>Utilities\TimeoutTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\KittyHawk.MqttLib\Utilities\Topic.cs">
+      <Link>Utilities\Topic.cs</Link>
+    </Compile>
+    <Compile Include="Client\MqttNetMfClient.cs" />
+    <Compile Include="Client\SubscriptionClientNetMf.cs" />
+    <Compile Include="Net\NetMfSocketAdapter.cs" />
+    <Compile Include="Net\SecureStream.cs" />
+    <Compile Include="Net\UnsecureStream.cs" />
+    <Compile Include="Plugins\Logging\DebugLogger.cs" />
+    <Compile Include="Plugins\Logging\LogCompositor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\MqttMf42PlatformSettings.cs" />
+    <Compile Include="Utilities\NetMfDebug.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SPOT.Native">
+    </Reference>
+    <Reference Include="Microsoft.SPOT.Net.Security" />
+    <Reference Include="System" />
+    <Reference Include="System.Net.Security" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>

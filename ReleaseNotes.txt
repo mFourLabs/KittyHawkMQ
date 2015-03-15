@@ -1,0 +1,130 @@
+
+KittyHawkMQ Client Library Release Notes
+
+This page documents all the new features, enhancements and visible changes included in the KittyHawkMQ release.
+For detailed information on using any of KittyHawkMQ's features, please refer to the online documentation.
+
+
+v0.9.6.0
+--------
+
+Additions
+Make ready for open source. Change license to MIT license.
+
+Fixes
+
+All Platforms (except the .NET Micro Framework)
+* Fixed possible null pointer exception when connecting the OnMessage handler of a SubscriptionClient.
+
+
+v0.9.5.0
+--------
+
+Additions
+
+All Platforms
+* Added public accessor to the raw message buffer for all MQTT messsage types.
+
+WinRT
+* Added Windows Phone 8.1 to complication target.
+
+Fixes
+
+All Platforms
+* Fixed misspelling of RefusedIdentifierRejected value in ConnectReturnCode enumeration.
+* IsConnected property of MqttClient would return true for a period of time after a connection was refused by the server.
+
+
+v0.9.4.0
+--------
+
+Additions
+
+All Platforms (except the .NET Micro Framework)
+* Added UnhandledPublishReceived event. Event is fired when publish messages are received from broker but have no Subscription instances associated with them.
+
+
+v0.9.4.0
+--------
+
+Fixes
+
+Win32
+* Fixed socket buffer corruption problem when receiving messages greater than about 2-3K in size.
+* Subscription instances not being cleaned up on unsubscribe
+
+All Platforms
+* Improved buffer handling for publish data
+
+
+v0.9.3.0
+--------
+
+Additions
+
+All Platforms (except the .NET Micro Framework)
+* Improved error handling for SubscriptionClient. Added OnSubscriptionError callback to allow clients to catch subscription errors when connecting/reconnecting to broker.
+
+Fixes
+
+All Platforms
+* Fixed several concurrency issues in socker layer.
+
+.NET Micro Framework
+* Fixed issue with Socket.Connect where it would intermittently never return.
+* Connect/Disconnect sequence is more robust.
+
+
+v0.9.2.0
+--------
+
+Changes
+
+All Platforms (except the .NET Micro Framework)
+* Changed the way clients hook publish events to improve usability. Clients create a SubscriptionClient object which receives only the subscribed to events. Modeled after the Windows Azure Service Bus library.
+
+Fixes
+
+All Platforms
+* Reading MqttMessage properties from publish message within a publish event will sometime cause a null reference exception.
+
+.NET Micro Framework
+* Calling DisconnectAsync on a disconnected client will deadlock the .NETMF socket adapter.
+
+
+
+v0.9.1.0
+--------
+
+Fixes
+
+All Platforms
+* PublishString helper would prepend string length to string payloads. This is not expected when sending data to 3rd party online services. No longer prepening string length to payload strings.
+* AdditionalErrorInfo not always propogating to clients.
+* ConnectAsync never returned if server doesn't respond to Connect request. Error was sent through the NetworkError event. ConnectAsync has been changed to return an error in this case.
+
+.NET Micro Framework
+* Cleaned up debug output from sockets.
+
+
+
+v0.9.0.0
+--------
+
+Additions
+
+All Platforms
+* SSL/TLS implementation.
+* IsConnected property added to MqttClient class.
+* Added AdditionalErrorInfo string property on event handlers. This is used to give extra error information if an exception is thrown when possible. Most useful on the .NET Micro Framework platform.
+
+.NET Micro Framework
+* New protocol setting: Hosts - a key/value dictionary containing strings for hostname/ip address pairs. This aids in hostname verification for TLS when DNS lookup is not available.
+
+Changes
+
+* Default network time-out reduced to 20 seconds.
+
+Fixes
+
+* .NET v4.5 Client crashing when attempting to subscribe to a topic on a disconnected client.
