@@ -103,6 +103,10 @@
     <Compile Include="Utilities\Frame.cs" />
     <Compile Include="Utilities\TimeoutTimer.cs" />
     <Compile Include="Utilities\Topic.cs" />
+    <Compile Include="Client\MqttiOSClient.cs" />
+    <Compile Include="Net\iOSSocketAdapter.cs" />
+    <Compile Include="Settings\MqttiOSPlatformSettings.cs" />
+    <Compile Include="Net\iOSSocketWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KittyHawkSample.snk" />
