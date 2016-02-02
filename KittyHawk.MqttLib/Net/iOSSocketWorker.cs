@@ -245,44 +245,27 @@ namespace KittyHawk.MqttLib.Net
 
             handler = (_, e1) =>
             {
-                if(e1.StreamEvent != NSStreamEvent.HasSpaceAvailable)
-                    return ;
-
                 stream.OnEvent -= handler;
 
-                byte[] sendBuffer = args.MessageToSend.Serialize();
-
-                EventHandler<NSStreamEventArgs> completedHandler = null;
-                completedHandler = (sender, e) =>
+                if(e1.StreamEvent == NSStreamEvent.ErrorOccurred)
                 {
-                    stream.OnEvent -= completedHandler;
-
-                    if (args.MessageToSend is IMqttIdMessage)
-                    {
-                        var msgWithId = args.MessageToSend as IMqttIdMessage;
-                        _logger.LogMessage("Socket", LogLevel.Verbose,
-                            string.Format("Sent message type '{0}', ID={1}.", msgWithId.MessageType,
-                                msgWithId.MessageId));
-                    }
-                    else
-                    {
-                        _logger.LogMessage("Socket", LogLevel.Verbose,
-                            string.Format("Sent message type '{0}'.", args.MessageToSend.MessageType));
-                    }
-
-                    if (e.StreamEvent == NSStreamEvent.ErrorOccurred)
-                    {
-                        args.SocketException = new Exception("Socket error occured: " + e.StreamEvent.ToString());
-                    }
-
+                    args.SocketException = new Exception("Something unexpected happened. " + e1.StreamEvent.ToString());
                     args.Complete();
-                };
 
-                stream.OnEvent += completedHandler;
-                stream.Write(sendBuffer, (nuint) sendBuffer.Length);
+
+                }
+
+                if(e1.StreamEvent != NSStreamEvent.HasSpaceAvailable)
+                        return ;
+
+
+                WriteAsyncInternal(stream, args);
             };
 
-            stream.OnEvent += handler;
+                if(stream.HasSpaceAvailable())
+                    WriteAsyncInternal(stream, args);
+            else
+                    stream.OnEvent += handler;
 
             //stream.OnEvent += (sender, e) => e.StreamEvent == NSStreamEvent.HasSpaceAvailable;
 
@@ -311,6 +294,40 @@ namespace KittyHawk.MqttLib.Net
                     new Exception("Unable to write to the TCP connection. See inner exception for details.", ex);
                 args.Complete();
             }
+        }
+
+        private void WriteAsyncInternal(NSOutputStream stream, SocketEventArgs args)
+        {
+            byte[] sendBuffer = args.MessageToSend.Serialize();
+
+            EventHandler<NSStreamEventArgs> completedHandler = null;
+            completedHandler = (sender, e) =>
+            {
+                stream.OnEvent -= completedHandler;
+
+                if (args.MessageToSend is IMqttIdMessage)
+                {
+                    var msgWithId = args.MessageToSend as IMqttIdMessage;
+                    _logger.LogMessage("Socket", LogLevel.Verbose,
+                        string.Format("Sent message type '{0}', ID={1}.", msgWithId.MessageType,
+                            msgWithId.MessageId));
+                }
+                else
+                {
+                    _logger.LogMessage("Socket", LogLevel.Verbose,
+                        string.Format("Sent message type '{0}'.", args.MessageToSend.MessageType));
+                }
+
+                if (e.StreamEvent == NSStreamEvent.ErrorOccurred)
+                {
+                    args.SocketException = new Exception("Socket error occured: " + e.StreamEvent.ToString());
+                }
+
+                args.Complete();
+            };
+
+            stream.OnEvent += completedHandler;
+            stream.Write(sendBuffer, (nuint) sendBuffer.Length);
         }
 
         public void Disconnect(string clientUid)
