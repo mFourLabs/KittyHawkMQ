@@ -77,6 +77,11 @@ namespace KittyHawk.MqttLib.Net
             inStream.Schedule (_socketWorker.RunLoop, NSRunLoop.NSDefaultRunLoopMode);
             outStream.Schedule (_socketWorker.RunLoop, NSRunLoop.NSDefaultRunLoopMode);
 
+            if (args.EncryptionLevel != SocketEncryption.None)
+            {
+                SetEncryptionOnStreams (args.EncryptionLevel, inStream, outStream);
+            }
+
             var inReady = false;
             var outReady = false;
 
@@ -135,20 +140,30 @@ namespace KittyHawk.MqttLib.Net
             _socketWorker.OnMessageReceived(handler);
         }
 
-        private static bool ValidateServerCertificate(
-            object sender,
-            X509Certificate certificate,
-            X509Chain chain,
-            SslPolicyErrors sslPolicyErrors)
+        private void SetEncryptionOnStreams(SocketEncryption encryption, NSInputStream inStream, NSOutputStream outStream)
         {
-            if (sslPolicyErrors != SslPolicyErrors.None)
+            if (encryption == SocketEncryption.Ssl)
             {
-                Debug.WriteLine("SOCKET: Certificate error: {0}", sslPolicyErrors.ToString());
-                return false;
+                inStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.SslV3;
+                outStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.SslV3;
             }
+            else if (encryption == SocketEncryption.Tls10)
+            {
+                inStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
+                outStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
+            }
+            else if (encryption == SocketEncryption.Tls11)
+            {
+                inStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
+                outStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
+            }
+            else if (encryption == SocketEncryption.Tls12)
+            {
+                inStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
+                outStream.SocketSecurityLevel = NSStreamSocketSecurityLevel.TlsV1;
 
-            Debug.WriteLine("SOCKET: No Certificate errors.");
-            return true;
+                //var key = ObjCRuntime.Dlfcn.GetStringConstant("kCFStreamPropertySSLSettings", Libraries.CoreFoundation.Handle);
+            }
         }
     }
 }

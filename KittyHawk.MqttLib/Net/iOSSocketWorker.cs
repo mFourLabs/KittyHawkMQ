@@ -230,7 +230,7 @@ namespace KittyHawk.MqttLib.Net
 
         public void WriteAsync(SocketEventArgs args)
         {
-            NSOutputStream stream = GetStreamForConnectionConext(args);
+            NSOutputStream stream = GetStreamForConnectionConext (args);
 
             if (stream == null)
             {
@@ -240,59 +240,39 @@ namespace KittyHawk.MqttLib.Net
 
             try
             {
-                
-            EventHandler<NSStreamEventArgs> handler = null;
-
-            handler = (_, e1) =>
-            {
-                stream.OnEvent -= handler;
-
-                if(e1.StreamEvent == NSStreamEvent.ErrorOccurred)
+                EventHandler<NSStreamEventArgs> handler = null;
+                handler = (_, e1) =>
                 {
-                    args.SocketException = new Exception("Something unexpected happened. " + e1.StreamEvent.ToString());
-                    args.Complete();
+                    stream.OnEvent -= handler;
 
+                    if (e1.StreamEvent == NSStreamEvent.ErrorOccurred)
+                    {
+                        args.SocketException = new Exception ("Something unexpected happened. " + e1.StreamEvent.ToString ());
+                        args.Complete ();
+                    }
 
-                }
+                    if (e1.StreamEvent != NSStreamEvent.HasSpaceAvailable)
+                        return;
 
-                if(e1.StreamEvent != NSStreamEvent.HasSpaceAvailable)
-                        return ;
+                    WriteAsyncInternal (stream, args);
+                };
 
-
-                WriteAsyncInternal(stream, args);
-            };
-
-                if(stream.HasSpaceAvailable())
-                    WriteAsyncInternal(stream, args);
-            else
+                if (stream.HasSpaceAvailable ())
+                    WriteAsyncInternal (stream, args);
+                else
                     stream.OnEvent += handler;
 
-            //stream.OnEvent += (sender, e) => e.StreamEvent == NSStreamEvent.HasSpaceAvailable;
-
-            // Here we are outside the lock, stream can be closed beneath us
-            // Typical scenario is the client asynchronously disconnects before we're finished sending it a message.
-            // For now, I'm OK with this. It's better than balling this up with locks.
-
-//                if (stream.HasSpaceAvailable())
-//                {
-                    
-//                }
-//                else
-//                {
-//                    args.SocketException = new Exception("Connection state is invalid. Please try reconnecting.");
-//                    args.Complete();
-//                }
             }
             catch (ObjectDisposedException)
             {
                 // Effectively ignoring this
-                args.Complete();
+                args.Complete ();
             }
             catch (Exception ex)
             {
                 args.SocketException =
-                    new Exception("Unable to write to the TCP connection. See inner exception for details.", ex);
-                args.Complete();
+                    new Exception ("Unable to write to the TCP connection. See inner exception for details.", ex);
+                args.Complete ();
             }
         }
 
@@ -350,7 +330,6 @@ namespace KittyHawk.MqttLib.Net
                     clientInfo.Stream.Input.Close();
                     clientInfo.Stream.Output.Close();
                 }
-              //  clientInfo.Socket.Dispose();
 
                 clientInfo.Dispose();
             }
@@ -450,9 +429,6 @@ namespace KittyHawk.MqttLib.Net
                     _logger.LogMessage("Socket", LogLevel.Error, "Some error occured within the input stream");
                 }
             };
-           //     buffer = ReadFromInputStreamAsync(stream, info.ClientUid, token);
-
-
         }
 
         private void ClientReceiverThreadProc()
@@ -476,46 +452,6 @@ namespace KittyHawk.MqttLib.Net
 
             receiverThread.Start();
         }
-
-//        private int _nextCollectionIndex;
-//        private ConnectedClientInfo GetNextClient()
-//        {
-//            lock (_connectedClients)
-//            {
-//                //DateTime now = DateTime.Now;
-//                //if (now.Second == 0 && now.Millisecond < 20)
-//                //{
-//                //    _logger.LogMessage("Socket", LogLevel.Verbose, "Number of live connections=" + _connectedClients.Count);
-//                //}
-//                if (_connectedClients.Count == 0)
-//                    return null;
-//
-//                if (_nextCollectionIndex >= _connectedClients.Count)
-//                    _nextCollectionIndex = 0;
-//
-//                ConnectedClientInfo info = _connectedClients.Values.ElementAt(_nextCollectionIndex);
-//                _nextCollectionIndex++;
-//                return info;
-//            }
-//        }
-
-//        private void PollClient(ConnectedClientInfo info, CancellationToken token)
-//        {
-//            CFSocket tcpClient = info.Socket;
-//
-//            byte[] buffer = null;
-//
-//            if (tcpClient.Available > 0)
-//            {
-//                NSInputStream stream = GetStreamForConnection(info).Input;
-//                buffer = ReadFromInputStreamAsync(stream, info.ClientUid, token);
-//            }
-//
-//            if (buffer != null && buffer.Length > 0)
-//            {
-//                ProcessBuffer(buffer, info);
-//            }
-//        }
 
         private byte[] ReadFromInputStream(NSInputStream stream, string clientUid)
         {
@@ -551,13 +487,6 @@ namespace KittyHawk.MqttLib.Net
             }
             //_logger.LogMessage("Socket", LogLevel.Warning,
             //    string.Format("                              Bytes read=      {0}.", receivedSize));
-
-//            if (token.IsCancellationRequested)
-//            {
-//                // Operation was cancelled
-//                _logger.LogMessage("Socket", LogLevel.Verbose, string.Format("Read header operation cancelled."));
-//                return null;
-//            }
 
             return completeBuffer;
         }
@@ -639,20 +568,5 @@ namespace KittyHawk.MqttLib.Net
             }
             return stream;
         }
-
-//        private NSStreamPair GetStreamForConnection(ConnectedClientInfo info)
-//        {
-//            if (info.Stream == null)
-//            {
-//                lock (info)
-//                {
-//                    if (info.Stream == null)
-//                    {
-//                        info.Stream = _getStreamHandler(info.Socket, _runLoop, info.Encryption);
-//                    }
-//                }
-//            }
-//            return info.Stream;
-//        }
     }
 }
