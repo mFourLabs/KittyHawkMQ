@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{7B62D1C4-2010-4108-8288-408E742B81FC}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KittyHawk.MqttLibiOS</RootNamespace>
+    <RootNamespace>KittyHawk.MqttLib</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>KittyHawk.MqttLibiOS</AssemblyName>
   </PropertyGroup>

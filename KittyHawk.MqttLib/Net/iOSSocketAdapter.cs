@@ -9,12 +9,34 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using KittyHawk.MqttLib.Interfaces;
 using KittyHawk.MqttLib.Plugins.Logging;
+using CoreFoundation;
+using Foundation;
 
 namespace KittyHawk.MqttLib.Net
 {
+    internal class NSStreamPair : IDisposable
+    {
+        public NSInputStream Input { get; private set; }
+        public NSOutputStream Output { get; private set; }
+
+        public NSStreamPair(NSInputStream input, NSOutputStream output)
+        {
+            Input = input;
+            Output = output;
+        }
+
+        public void Dispose()
+        {
+            Input.Dispose ();
+            Output.Dispose ();
+
+            Input = null;
+            Output = null;
+        }
+    }
+
     internal class iOSSocketAdapter : ISocketAdapter
     {
-        private string _remoteHost;
         private readonly ILogger _logger;
         private readonly iOSSocketWorker _socketWorker;
 
@@ -22,7 +44,6 @@ namespace KittyHawk.MqttLib.Net
         {
             _logger = logger;
             _socketWorker = new iOSSocketWorker(_logger);
-            _socketWorker.OnGetStream(GetStream);
         }
 
         public bool IsEncrypted(string clientUid)
@@ -41,45 +62,55 @@ namespace KittyHawk.MqttLib.Net
             // No impl for Win32
         }
 
-        public async void ConnectAsync(string ipOrHost, int port, SocketEventArgs args)
+        public void ConnectAsync(string ipOrHost, int port, SocketEventArgs args)
         {
-            TcpClient tcpClient;
-            IPAddress ip;
-            Task connectTask;
+            CFReadStream cfRead;
+            CFWriteStream cfWrite;
 
-            if (IPAddress.TryParse(ipOrHost, out ip))
-            {
-                _remoteHost = "";
-                var endPoint = new IPEndPoint(ip, port);
-                tcpClient = CreateSocket(endPoint.AddressFamily);
-                connectTask = tcpClient.ConnectAsync(endPoint.Address, port);
-            }
-            else
-            {
-                _remoteHost = ipOrHost;
-                tcpClient = CreateSocket(AddressFamily.Unspecified);
-                connectTask = tcpClient.ConnectAsync(ipOrHost, port);
-            }
+            CFStream.CreatePairWithSocketToHost(ipOrHost, port, out cfRead, out cfWrite);
 
-            await connectTask.ContinueWith(task =>
+            // Toll-Free binding from CFStream to a NSStream.
+            var inStream = (NSInputStream)ObjCRuntime.Runtime.GetNSObject(cfRead.Handle);
+            var outStream = (NSOutputStream)ObjCRuntime.Runtime.GetNSObject(cfWrite.Handle);
+            var pair = new NSStreamPair (inStream, outStream);
+
+            inStream.Schedule (_socketWorker.RunLoop, NSRunLoop.NSDefaultRunLoopMode);
+            outStream.Schedule (_socketWorker.RunLoop, NSRunLoop.NSDefaultRunLoopMode);
+
+            var inReady = false;
+            var outReady = false;
+
+            Action complete = () =>
             {
-                if (task.IsFaulted)
-                {
-                    if (task.Exception != null && task.Exception.InnerExceptions.Count > 0)
-                    {
-                        args.SocketException = task.Exception.InnerExceptions[0];
-                    }
-                    else
-                    {
-                        args.SocketException = new Exception("Unknown socket error.");
-                    }
-                }
-                else
-                {
-                    _socketWorker.ConnectTcpClient(tcpClient, port, args.EncryptionLevel, args.ClientUid);
-                }
-                args.Complete();
-            });
+                _socketWorker.ConnectTcpClient (pair, port, args.EncryptionLevel, args.ClientUid);
+                args.Complete ();
+            };
+
+            EventHandler<NSStreamEventArgs> inReadyHandler = null;
+            inReadyHandler = (_, e) =>
+            {
+                inStream.OnEvent -= inReadyHandler;
+                inReady = true;
+
+                if (inReady && outReady)
+                    complete ();
+            };
+
+            EventHandler<NSStreamEventArgs> outReadyHandler = null;
+            outReadyHandler = (_, e) =>
+            {
+                outStream.OnEvent -= outReadyHandler;
+                outReady = true;
+
+                if (inReady && outReady)
+                    complete ();
+            };
+
+            inStream.OnEvent += inReadyHandler;
+            outStream.OnEvent += outReadyHandler;
+
+            inStream.Open ();
+            outStream.Open ();
         }
 
         public void WriteAsync(SocketEventArgs args)
@@ -102,56 +133,6 @@ namespace KittyHawk.MqttLib.Net
         public void OnMessageReceived(NetworkReceiverEventHandler handler)
         {
             _socketWorker.OnMessageReceived(handler);
-        }
-
-        private TcpClient CreateSocket(AddressFamily addressFamily)
-        {
-            TcpClient client;
-
-            if (addressFamily == AddressFamily.Unspecified)
-            {
-                client = new TcpClient();
-            }
-            else
-            {
-                client = new TcpClient(addressFamily);
-            }
-
-            client.NoDelay = true;
-            return client;
-        }
-
-        private Stream GetStream(TcpClient tcpClient, SslProtocols encryption)
-        {
-            if (encryption != SslProtocols.None)
-            {
-                _logger.LogMessage("Socket", LogLevel.Verbose, string.Format("Establishing channel encryption {0}.", encryption));
-                var sslStream = new SslStream(tcpClient.GetStream(), false, ValidateServerCertificate, null);
-
-                try
-                {
-                    _logger.LogMessage("Socket", LogLevel.Verbose, string.Format("Authenticating client certificate with remote host CN={0}.", _remoteHost));
-                    sslStream.AuthenticateAsClient(_remoteHost,
-                        null,
-                        encryption,
-                        false);
-                }
-                catch (IOException ex)
-                {
-                    // Bug in .NET code - handle gracefully
-                    if (ex.HResult == -2146232800)
-                    {
-                        throw new IOException("Reconnecting to the same broker in a continuous session using a the secure client is not supported. Restart the process to reconnect or switch to a non-secure client.", ex);
-                    }
-                    throw;
-                }
-
-                return sslStream;
-            }
-            else
-            {
-                return tcpClient.GetStream();
-            }
         }
 
         private static bool ValidateServerCertificate(
