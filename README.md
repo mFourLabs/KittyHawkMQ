@@ -8,7 +8,7 @@ The project was built using Visual Studio 2013 update 4 and Windows 8.1 OS. The 
 
 ## Project Layout
 
-* MqttLib - Contains both the Win32 and the WinRT(PCL) projects. There are 2 seperate .csproj files within the folder.
+* MqttLib - Contains Win32, WinRT(PCL) and iOS projects.
 * MqttLibMf42 - Contains the .NET Microframework v4.2 project.
 * MqttLibPhone8 - Contains the Windows Phone 8 project.
 * MqttLib_Tests - Units test run against the Win32 version of the source code.
