@@ -1,14 +1,14 @@
 # KittyHawk MQTT .NET Library
 
-A .NET implementation of the MQTT protocol. The library was designed to run across several Microsoft platforms by creating abstractions around platform dependent functionality. Most of the source code is shared across the different projects with only the implementations of these abstractions being different. Documentation for using the library can be found [here](http://www.kittyhawkmq.com/kittyhawkmq-client-api-documentation-latest/).
+A .NET implementation of the MQTT protocol. The library was designed to run across several platforms by creating abstractions around platform dependent functionality. Most of the source code is shared across the different projects with only the implementations of these abstractions being different. Documentation for using the library can be found [here](http://www.kittyhawkmq.com/kittyhawkmq-client-api-documentation-latest/).
 
 ## System Requirements
 
-The project was built using Visual Studio 2013 update 4 and Windows 8.1 OS. The latest version of .NET Microframework must also be installed.
+The project was built using Visual Studio 2013 update 4 and Windows 8.1 OS. The latest version of .NET Microframework must also be installed. The iOS project requires Xamarin.
 
 ## Project Layout
 
-* MqttLib - Contains Win32, WinRT(PCL) and iOS projects.
+* MqttLib - Contains Win32, WinRT(PCL) and iOS(Xamarin) projects.
 * MqttLibMf42 - Contains the .NET Microframework v4.2 project.
 * MqttLibPhone8 - Contains the Windows Phone 8 project.
 * MqttLib_Tests - Units test run against the Win32 version of the source code.
